@@ -2,9 +2,16 @@ import pygame
 from pygame.locals import *
 
 pygame.init()
-
-screen = pygame.display.set_mode((800, 600))
+# Create the game window
+screen_width, screen_height = 800, 600
+screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Breakin' Bricks")
+
+# Font
+font = pygame.font.SysFont("Arial", 20)
+
+# Score
+score = 0
 
 # Bat
 bat = pygame.image.load("./images/paddle.png")
@@ -36,6 +43,7 @@ side_gap = (
     screen.get_width() - (brick_rect.width + brick_gap) * brick_cols + brick_gap
 ) // 2
 
+
 # **** Helper functions ****
 # Function to create bricks
 def create_bricks():
@@ -47,25 +55,38 @@ def create_bricks():
             brickX = x * (brick_rect.width + brick_gap) + side_gap
             bricks.append((brickX, brickY))
 
+
 # Function to restart the game
 def restart_game():
-        global ball_served
-        global sx, sy
-        ball_served = False
-        # Reset the ball
-        ball_rect.topleft = ball_start
-        # Reset the bat
-        bat_rect.y = screen.get_height() - 100
-        bat_rect.x = (screen.get_width() - bat_rect.width) / 2
-        sx, sy = ball_speed  # Reset the ball speed
-        create_bricks() # Reset bricks
+    global ball_served
+    global sx, sy
+    global score
+    ball_served = False
+    # Reset the ball
+    ball_rect.topleft = ball_start
+    # Reset the bat
+    bat_rect.y = screen.get_height() - 100
+    bat_rect.x = (screen.get_width() - bat_rect.width) / 2
+    sx, sy = ball_speed  # Reset the ball speed
+    create_bricks()  # Reset bricks
+    score = 0 # reset score
 
-create_bricks() # Call our function to create bricks
+# Function to render text
+def render_text(text, x, y, color=(255, 255, 255)):
+    text_surface = font.render(
+        text, True, color
+    )  # the second parameter is anti aliasing
+    text_rect = text_surface.get_rect()
+    text_rect.center = (x, y)
+    screen.blit(text_surface, text_rect)
+
+
+create_bricks()  # Call our function to create bricks
 clock = pygame.time.Clock()
 game_over = False
 
 while not game_over:
-    dt = clock.tick(50)
+    dt = clock.tick(100)
     screen.fill((0, 0, 0))
     pressed = pygame.key.get_pressed()
 
@@ -80,9 +101,9 @@ while not game_over:
     # **** Bat movement ****
     if ball_served:
         if pressed[K_LEFT]:
-            bat_rect.x -= 0.5 * dt
+            bat_rect.x -= 0.7 * dt
         if pressed[K_RIGHT]:
-            bat_rect.x += 0.5 * dt
+            bat_rect.x += 0.7 * dt
 
     # Restricting bat to not move out of the screen
     if bat_rect.x > screen.get_width() - bat_rect.width:
@@ -162,6 +183,9 @@ while not game_over:
     # Check if any bricks have been hit and remove them
     if delete_brick is not None:
         bricks.remove(delete_brick)
+        score += 1 # Update score
+    
+    render_text(f"Score: {score}", screen_width // 2, screen.get_height() - 50)
 
     # Close the window on quit
     for event in pygame.event.get():
