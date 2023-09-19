@@ -101,9 +101,9 @@ while not game_over:
     # **** Bat movement ****
     if ball_served:
         if pressed[K_LEFT]:
-            bat_rect.x -= 0.7 * dt
+            bat_rect.x -= 1 * dt
         if pressed[K_RIGHT]:
-            bat_rect.x += 0.7 * dt
+            bat_rect.x += 1 * dt
 
     # Restricting bat to not move out of the screen
     if bat_rect.x > screen.get_width() - bat_rect.width:
