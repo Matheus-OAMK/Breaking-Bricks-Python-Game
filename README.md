@@ -19,7 +19,7 @@ In this game, your objective is to destroy all the bricks on the screen by bounc
 1. Clone this repository to your local machine:
 
 ```bash
- git clone https://github.com/Matheus-OAMK/Breaking-Bricks-Pyhon-Game.git
+ git clone https://github.com/Matheus-OAMK/Breaking-Bricks-Python-Game.git
 ```
 
 2. Install the required packages using pip:
